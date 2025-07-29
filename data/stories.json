@@ -1,0 +1,65 @@
+[
+  {
+    "title": "AI for Good",
+    "writers": "Nadi",
+    "synopsis": "Exploring how AI can be used for the benefit of humanity.",
+    "category": "Technology",
+    "status": "Publish",
+    "keyword": [
+      "AI",
+      "Humanity",
+      "Innovation"
+    ],
+    "cover": "https://example.com/cover.jpg",
+    "chapters": [
+      {
+        "title": "Introduction to AI",
+        "content": "Artificial Intelligence is changing the world."
+      },
+      {
+        "title": "AI for Social Good",
+        "content": "AI can be used to solve societal problems."
+      }
+    ],
+    "id": 1753773794094,
+    "lastUpdated": "2025-07-29T07:23:14.095Z"
+  },
+  {
+    "title": "Martabak Telor",
+    "writers": "GUe Aku",
+    "category": "Technology",
+    "keyword": [
+      "AI",
+      "ML",
+      "Ethics"
+    ],
+    "status": "Draft",
+    "chapters": [
+      {
+        "title": "Cara membuat",
+        "content": "Agalea adalah martabak."
+      }
+    ],
+    "id": 1753773605067,
+    "lastUpdated": "2025-07-29T07:20:05.067Z"
+  },
+  {
+    "title": "AI for Humanity (Updated)",
+    "writers": "Nadi",
+    "category": "Technology",
+    "keyword": [
+      "AI",
+      "ML",
+      "Ethics"
+    ],
+    "status": "Publish",
+    "chapters": [
+      {
+        "title": "AI in Everyday Life",
+        "content": "Today, AI is in your phone, your car, and your home."
+      }
+    ],
+    "id": 1753772962509,
+    "lastUpdated": "2025-07-29T07:09:22.509Z"
+  }
+]
