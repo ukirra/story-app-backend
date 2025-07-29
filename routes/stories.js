@@ -22,42 +22,36 @@ router.get('/', async (req, res) => {
     const stories = await Story.find(query);
     res.json(stories);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
 router.get('/:id', async (req, res) => {
   try {
     const story = await Story.findById(req.params.id);
-    if (!story) return res.status(404).json({ error: 'Not found' });
+    if (!story) return res.status(404).json({ error: 'Story not found' });
     res.json(story);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: 'Failed to fetch story' });
   }
 });
 
 router.post('/', async (req, res) => {
   try {
-    const { title, writers, category, chapters } = req.body;
+    const { title, writers, category, status, keyword, cover, chapters } = req.body;
 
-    if (!title || !writers || !category) {
-      return res.status(400).json({ error: 'Title, Author, and Category are required.' });
+    if (!title || !writers || !category || !status) {
+      return res.status(400).json({ error: 'Title, Author, Category, and Status are required.' });
     }
-
-    if (!chapters || chapters.length === 0) {
-      return res.status(400).json({ error: 'Story must have at least one chapter.' });
-    }
-
-    const chaptersWithDate = chapters.map(ch => ({
-      ...ch,
-      updatedAt: new Date().toLocaleDateString('en-GB', {
-        day: '2-digit', month: 'long', year: 'numeric'
-      })
-    }));
 
     const story = new Story({
-      ...req.body,
-      chapters: chaptersWithDate,
+      title,
+      writers,
+      category,
+      status,
+      keyword: keyword || [],
+      cover: cover || '',
+      chapters: [],
       lastUpdated: new Date().toISOString(),
     });
 
@@ -70,33 +64,37 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   try {
-    const { title, writers, category, chapters } = req.body;
+    const { title, writers, category, status, keyword, cover, chapters } = req.body;
 
-    if (!title || !writers || !category) {
-      return res.status(400).json({ error: 'Title, Author, and Category are required.' });
+    if (!title || !writers || !category || !status) {
+      return res.status(400).json({ error: 'Title, Author, Category, and Status are required.' });
     }
 
-    if (!chapters || chapters.length === 0) {
-      return res.status(400).json({ error: 'Story must have at least one chapter.' });
-    }
-
-    const chaptersWithDate = chapters.map(ch => ({
+    const chaptersWithDate = (chapters || []).map((ch) => ({
       ...ch,
       updatedAt: new Date().toLocaleDateString('en-GB', {
-        day: '2-digit', month: 'long', year: 'numeric'
-      })
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+      }),
     }));
 
     const updated = await Story.findByIdAndUpdate(
       req.params.id,
       {
-        ...req.body,
+        title,
+        writers,
+        category,
+        status,
+        keyword: keyword || [],
+        cover: cover || '',
         chapters: chaptersWithDate,
         lastUpdated: new Date().toISOString(),
       },
       { new: true }
     );
 
+    if (!updated) return res.status(404).json({ error: 'Story not found' });
     res.json(updated);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -105,7 +103,8 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-    await Story.findByIdAndDelete(req.params.id);
+    const deleted = await Story.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ error: 'Story not found' });
     res.json({ message: 'Story deleted' });
   } catch (err) {
     res.status(400).json({ error: err.message });
