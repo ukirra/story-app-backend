@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Story = require('../models/Story');
 
-// GET semua cerita + search & filter
 router.get('/', async (req, res) => {
   const { search = '', category = '', status = '' } = req.query;
 
@@ -27,7 +26,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET satu cerita berdasarkan ID
 router.get('/:id', async (req, res) => {
   try {
     const story = await Story.findById(req.params.id);
@@ -38,7 +36,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST tambah cerita baru
 router.post('/', async (req, res) => {
   try {
     const chaptersWithDate = (req.body.chapters || []).map(ch => ({
@@ -61,7 +58,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-// PUT update cerita
 router.put('/:id', async (req, res) => {
   try {
     const chaptersWithDate = (req.body.chapters || []).map(ch => ({
@@ -87,7 +83,6 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE cerita
 router.delete('/:id', async (req, res) => {
   try {
     await Story.findByIdAndDelete(req.params.id);
@@ -99,7 +94,6 @@ router.delete('/:id', async (req, res) => {
 
 module.exports = router;
 
-// POST tambah 1 chapter ke story tertentu
 router.post('/:id/chapters', async (req, res) => {
   try {
     const chapter = {
