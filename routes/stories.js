@@ -1,6 +1,30 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
+const multer = require('multer');
 const Story = require('../models/Story');
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/uploads/');
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9) + ext;
+    cb(null, uniqueName);
+  }
+});
+const upload = multer({ storage });
+
+router.post('/upload/cover', upload.single('cover'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+
+  const fileUrl = `/uploads/${req.file.filename}`;
+  res.status(200).json({
+    filename: req.file.filename,
+    url: fileUrl,
+  });
+});
 
 router.get('/', async (req, res) => {
   const { search = '', category = '', status = '' } = req.query;
