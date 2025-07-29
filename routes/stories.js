@@ -38,15 +38,16 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const { title, writers, category, status, keyword, cover, chapters } = req.body;
+    const { title, writers, synopsis, category, status, keyword, cover, chapters } = req.body;
 
-    if (!title || !writers || !category || !status) {
-      return res.status(400).json({ error: 'Title, Author, Category, and Status are required.' });
+    if (!title || !writers || !synopsis || !category || !status) {
+      return res.status(400).json({ error: 'Title, Author, Synopsis, Category, and Status are required.' });
     }
 
     const story = new Story({
       title,
       writers,
+      synopsis,
       category,
       status,
       keyword: keyword || [],
@@ -64,10 +65,10 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   try {
-    const { title, writers, category, status, keyword, cover, chapters } = req.body;
+    const { title, writers, synopsis, category, status, keyword, cover, chapters } = req.body;
 
-    if (!title || !writers || !category || !status) {
-      return res.status(400).json({ error: 'Title, Author, Category, and Status are required.' });
+    if (!title || !writers || !synopsis || !category || !status) {
+      return res.status(400).json({ error: 'Title, Author, Synopsis, Category, and Status are required.' });
     }
 
     const chaptersWithDate = (chapters || []).map((ch) => ({
@@ -84,6 +85,7 @@ router.put('/:id', async (req, res) => {
       {
         title,
         writers,
+        synopsis,
         category,
         status,
         keyword: keyword || [],
