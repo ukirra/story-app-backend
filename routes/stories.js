@@ -38,7 +38,17 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const chaptersWithDate = (req.body.chapters || []).map(ch => ({
+    const { title, writers, category, chapters } = req.body;
+
+    if (!title || !writers || !category) {
+      return res.status(400).json({ error: 'Title, Author, and Category are required.' });
+    }
+
+    if (!chapters || chapters.length === 0) {
+      return res.status(400).json({ error: 'Story must have at least one chapter.' });
+    }
+
+    const chaptersWithDate = chapters.map(ch => ({
       ...ch,
       updatedAt: new Date().toLocaleDateString('en-GB', {
         day: '2-digit', month: 'long', year: 'numeric'
@@ -60,7 +70,17 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   try {
-    const chaptersWithDate = (req.body.chapters || []).map(ch => ({
+    const { title, writers, category, chapters } = req.body;
+
+    if (!title || !writers || !category) {
+      return res.status(400).json({ error: 'Title, Author, and Category are required.' });
+    }
+
+    if (!chapters || chapters.length === 0) {
+      return res.status(400).json({ error: 'Story must have at least one chapter.' });
+    }
+
+    const chaptersWithDate = chapters.map(ch => ({
       ...ch,
       updatedAt: new Date().toLocaleDateString('en-GB', {
         day: '2-digit', month: 'long', year: 'numeric'
@@ -92,8 +112,6 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
-
 router.post('/:id/chapters', async (req, res) => {
   try {
     const chapter = {
@@ -120,3 +138,5 @@ router.post('/:id/chapters', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
+module.exports = router;
